@@ -8,4 +8,6 @@ Convert CSV to JSON
 2. Then start the script with csv file in the same folder.
 
 
+requires python demjson module.
+
 completely compatible with AMCharts.
