@@ -1,0 +1,311 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>amCharts examples</title>
+        <link rel="stylesheet" href="style.css" type="text/css">
+        <script src="amcharts/amcharts.js" type="text/javascript"></script>
+        <script src="amcharts/serial.js" type="text/javascript"></script>
+        <script src="Graphdata11.json" type="text/javascript"></script>
+        
+        <!-- scripts for exporting chart as an image -->
+        <!-- Exporting to image works on all modern browsers except IE9 (IE10 works fine) -->
+        <!-- Note, the exporting will work only if you view the file from web server -->
+        <!--[if (!IE) | (gte IE 10)]> -->
+        <script src="amcharts/exporting/amexport.js" type="text/javascript"></script>
+        <script src="amcharts/exporting/rgbcolor.js" type="text/javascript"></script>
+        <script src="amcharts/exporting/canvg.js" type="text/javascript"></script>
+        <script src="amcharts/exporting/jspdf.js" type="text/javascript"></script>
+        <script src="amcharts/exporting/filesaver.js" type="text/javascript"></script>  
+        <script src="amcharts/exporting/jspdf.plugin.addimage.js" type="text/javascript"></script>
+        <!-- <![endif]-->
+        
+        <script type="text/javascript">
+		
+			var chartList = [] ;
+	
+		
+	
+		function generateGraph(divname,id)	
+		{
+		
+		
+		//precision:-1, decimalSeparator:'.', thousandsSeparator:','}
+			
+			var pObj = new Object();
+			pObj.precision = 2;
+			pObj.decimalSeparator = '.';
+			pObj.thousandsSeparator = ',';
+			
+		
+			
+			/*for(var k =0 ;k < no_of_col ; k++)
+			{
+				sum =0;
+				for(var j=0;j<no_of_rows;j++) {
+				if(k == 0)
+				sum =sum + parseFloat(graph_config[id].graphData[j].column_1);
+				else if(k == 1)
+				sum =sum + parseFloat(graph_config[id].graphData[j].column_2);
+				else if(k == 2)
+				sum =sum + parseFloat(graph_config[id].graphData[j].column_3);
+				else if(k == 3)
+				sum =sum + parseFloat(graph_config[id].graphData[j].column_4);
+				else if(k == 4)
+				sum =sum + parseFloat(graph_config[id].graphData[j].column_5);
+				}
+				
+				avgValue = sum / no_of_rows;
+				
+				arrGuides[k] = new AmCharts.Guide();
+				arrGuides[k].value = avgValue;
+				arrGuides[k].lineColor = "#CC0000";
+				arrGuides[k].dashLength = 4;
+				arrGuides[k].label = "avg: " + avgValue;
+				arrGuides[k].inside = true;
+				arrGuides[k].lineAlpha = 1;
+				
+				
+			}
+			*/
+			var divObj = document.createElement("div");
+			divObj.id = "chart_legend_"+graph_config[id].id;
+			//window.alert("genrate graph ");
+			//window.alert("Legend :" + config.charts[id].yaxis_legend);
+			//window.alert("divname " + divname);
+				//var divnm = new String("chartone");
+				
+			
+				
+			//	chartList[id] = AmCharts.makeChart(divname, {
+			
+			var graph_json ={
+                type: "serial",
+				
+                dataProvider: graph_config[id].graphData,
+                categoryField: 'column_0',
+				autoMarginOffset: 5,
+				backgroundColor: "#F7F0F1",
+				legendDiv: divObj,
+				marginTop: 20,
+				marginRight: 5,
+				marginBottom: 5,
+                //depth3D: 20,
+                //angle: 30,
+				//title: "Bandwidth Reading",
+				numberFormatter : pObj,
+				
+				titles: [{"text":graph_config[id].chart_name, "size": 18, "color": "#CC0000", "alpha": 1, "bold": true}],
+					
+                categoryAxis: {
+					title: graph_config[id].x_axis,
+					dashLenght: 5,
+					minorGridEnabled: true,
+					axixColor: "#DADADA",			
+					gridAlpha: 0.15,
+                    gridPosition: "start"
+                },
+			
+               valueAxes: [{
+				    title: graph_config[id].y_axis,
+					axisColor: "Black",
+					axisThickness: 2,
+					//fillAlpha: 2,
+					 gridAlpha: 0,
+					 //guides: arrGuides,
+					 
+					 guides: [],
+					// inside: true,
+					// unit: " mbps",
+					 axisAlpha: 0,
+					 id: "vl1",
+					// maximum:graph_config[id].chart_maxval,
+					// minimum:graph_config[id].chart_minval
+					minimum:0
+
+					
+					 
+					 
+					 
+				    }
+				
+				],
+				graphs: [],
+	
+                chartCursor: {
+                    cursorAlpha: 0,
+                    zoomable: false,
+                    categoryBalloonEnabled: false
+                },
+         
+                exportConfig: {
+                    menuTop: "21px",
+                    menuBottom: "auto",
+                    menuRight: "21px",
+                    backgroundColor: "#efefef",
+                    
+                    menuItemStyle	: {
+                    backgroundColor			: '#EFEFEF',
+                    rollOverBackgroundColor	: '#DDDDDD'},
+             
+                    menuItems: [{
+                        textAlign: 'center',
+                        icon: 'amcharts/images/export.png',
+                        onclick:function(){},
+                        items: [{
+                            title: 'JPG',
+                            format: 'jpg'
+                        }, {
+                            title: 'PNG',
+                            format: 'png'
+                        }, {
+                            title: 'SVG',
+                            format: 'svg'
+                        }, {
+                            title: 'PDF',
+                            format: 'pdf'
+                        }]
+                    }]
+                },
+				
+				chartCursor: {
+                    cursorPosition: "mouse"
+                },
+				
+                chartScrollbar: {
+                    scrollbarHeight: 40,
+                    color: "#FFFFFF",
+                    autoGridCount: true,
+                    
+                },
+				
+				 legend: {
+					equalWidths: false,
+					valueWidth: 50,
+					color: "#000000",
+					markerType: "circle",
+					bulletType: "round",
+                    //maxRows: 4,  
+                    useGraphSettings: true
+					
+					
+                }
+							
+            };
+			
+					
+					var graph;
+					
+					var unit = graph_config[id].chart_unit;
+					var avgValue;
+					var no_of_col = graph_config[id].num_col;
+					var no_of_col = 1;
+					var no_of_rows = graph_config[id].graphData.length;
+					var arrGuides = new Array(no_of_col);
+					var sum = 0;
+					for(var i = 1; i <= graph_config[id].num_col; i++)
+					{
+					
+						graph_json.graphs.push({
+								lineThickness: 1,
+								title: graph_config[id].legend[i],
+								valueAxis: 'vl1',
+								valueField: 'column_'+(i),
+								lineColor: graph_config[id].color[i],
+								negativeLineColor: "#0352b5",
+								balloonText: graph_config[id].legend[i]+": [[value]] "+unit,
+								legendValueText: "[[value]] "+unit,
+								//legendPeriodValueText: "AVG of Selected Region :[[value.average]]"+unit
+								}
+						);
+						
+						
+						sum =0;
+						for(var j=0;j<no_of_rows;j++) {
+						if(i == 1)
+						sum =sum + parseFloat(graph_config[id].graphData[j].column_1);
+						else if(i == 2)
+						sum =sum + parseFloat(graph_config[id].graphData[j].column_2);
+						else if(i == 3)
+						sum =sum + parseFloat(graph_config[id].graphData[j].column_3);
+						else if(i == 4)
+						sum =sum + parseFloat(graph_config[id].graphData[j].column_4);
+						else if(i == 5)
+						sum =sum + parseFloat(graph_config[id].graphData[j].column_5);
+						}
+						
+						avgValue = sum / no_of_rows;
+						avgValue = Math.round(avgValue, 4);
+						
+						graph_json.valueAxes[0].guides.push({
+							
+							//value: "[[value.average]]",
+							value: avgValue,
+							dashLength: 4,
+						       // tickLength: 3,
+						//	label: graph_config[id].legend[i]+" avg: "+avgValue +" "+unit,
+							lineColor: graph_config[id].color[i],
+							inside: true,
+							lineAlpha:1
+						
+						});
+
+					}
+
+					chartList[id] = AmCharts.makeChart(divname,graph_json); 			
+					chartList[id].validateData();	
+		}
+		
+		function loadGraphList (){	
+		
+						//window.alert("load graph");
+						var no_of_charts = graph_config.length;
+						//window.alert("no of charts" + no_of_charts);
+						chartList = new Array(no_of_charts);
+						for( var i = 0; i < no_of_charts ; i++)
+						{
+							var iDiv = document.createElement('div');
+							
+							
+							iDiv.id = 'chart_' + graph_config[i].id;
+							
+							//getting value from json
+							iDiv.className = 'chart_div_class';
+							
+							
+							iDiv.style.width ="100%";
+							iDiv.style.height = "600px";
+												
+							
+							document.getElementById('chartdiv').appendChild(iDiv);
+							
+							
+							//generateGraph(iDiv.id,i);
+							
+						}
+						for (var i =0;i <no_of_charts ; i++)
+						{
+								generateGraph('chart_'+graph_config[i].id,i);
+					    }
+						
+												
+										
+						
+			}
+			
+			
+
+	
+		
+        </script>
+    </head>
+    
+    <body onload="loadGraphList()">
+		
+        <div id="chartdiv" style="width: 100%; height: 1000px;">
+		
+		</div>
+		 </body>
+
+</html>
